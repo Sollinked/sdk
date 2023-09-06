@@ -2,12 +2,12 @@ import * as account from "./src/Account";
 import * as mail from './src/Mail';
 import * as github from './src/Github';
 import * as calendar from './src/Calendar';
-import { AuthCallParams } from "./types";
+import { AuthCallParams, ProviderProps, SollinkedContextState } from "./types";
 import { User, UserUpdateParams } from "./src/Account/types";
 import { MailTier } from "./src/Mail/types";
-import { UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
+import { UpdateUserReservationParams, UserReservationSetting } from "./src/Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams } from "./src/Github/types";
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 class UninitializedError extends Error {
     constructor() {
@@ -113,19 +113,47 @@ export class SollinkedAuthed {
     }
 }
 
+// react's version
+export const SollinkedContext = createContext<SollinkedContextState>({
+    user: undefined,
+    updateAccount: undefined,
+    setMailTiers: undefined,
+    claimMail: undefined,
+    claimAllMail: undefined,
+    setCalendarPresetPrice: undefined,
+    setCalendarCustomPrice: undefined,
+    newGithubProfile: undefined,
+    updateGithubProfile: undefined,
+});
 
-export const useSollinked = (props: AuthCallParams) => {
+export const useSollinked = () => {
+    return useContext(SollinkedContext);
+}
+
+export const Provider = ({
+    children,
+    auth,
+}: ProviderProps) => {
     const [user, setUser] = useState<User>();
 
     // account functions
     const me = useCallback(async() => {
-        return await account.me({ ...props });
+        if(!auth.address || !auth.message || !auth.signature) {
+            return;
+        }
+
+        let { address, message, signature } = auth;
+        return await account.me({ address, message, signature });
     }, [])
 
 
     // initialize
     const init = useCallback(async() => {
         let res = await me();
+        if(!res) {
+            return;
+        }
+
         if(typeof res === "string") {
             return;
         }
@@ -137,33 +165,57 @@ export const useSollinked = (props: AuthCallParams) => {
     }, []);
 
     // update the account
-    const updateAccount = useCallback(async(params: UserUpdateParams) => {
+    const updateAccount = async(params: Omit<UserUpdateParams, "address" | "message" | "signature">) => {
         if(!user) {
             throw new UninitializedError();
         }
-        return await account.update(user.id, {...props, ...params});
-    }, [ user ])
+        
+        if(!auth.address || !auth.message || !auth.signature) {
+            return;
+        }
+
+        let { address, message, signature } = auth;
+        return await account.update(user.id, {address, message, signature, ...params});
+    }
 
     // mail functinos
     const setMailTiers = useCallback(async(tiers: MailTier[]) => {
         if(!user) {
             throw new UninitializedError();
         }
-        return await mail.setTiers(user.id, {...props, tiers});
+        
+        if(!auth.address || !auth.message || !auth.signature) {
+            return;
+        }
+
+        let { address, message, signature } = auth;
+        return await mail.setTiers(user.id, {address, message, signature, tiers});
     }, [ user ]);
 
     const claimMail = useCallback(async(id: number, claimToAddress?: string) => {
         if(!user) {
             throw new UninitializedError();
         }
-        return await mail.claim(user.id, {...props, mailId: id, claimToAddress });
+        
+        if(!auth.address || !auth.message || !auth.signature) {
+            return;
+        }
+
+        let { address, message, signature } = auth;
+        return await mail.claim(user.id, {address, message, signature, mailId: id, claimToAddress });
     }, []);
 
     const claimAllMail = useCallback(async(claimToAddress?: string) => {
         if(!user) {
             throw new UninitializedError();
         }
-        return await mail.claimAll(user.id, {...props, claimToAddress});
+        
+        if(!auth.address || !auth.message || !auth.signature) {
+            return;
+        }
+
+        let { address, message, signature } = auth;
+        return await mail.claimAll(user.id, {address, message, signature, claimToAddress});
     }, []);
 
     // calendar functions
@@ -203,15 +255,22 @@ export const useSollinked = (props: AuthCallParams) => {
         return await github.newIssue(params);
     }, []);
 
-    return {
-        user,
-        updateAccount,
-        setMailTiers,
-        claimMail,
-        claimAllMail,
-        setCalendarPresetPrice,
-        setCalendarCustomPrice,
-        newGithubProfile,
-        updateGithubProfile
-    }
+    return (
+        <SollinkedContext.Provider
+            value={{
+                user,
+                updateAccount,
+                setMailTiers,
+                claimMail,
+                claimAllMail,
+                setCalendarPresetPrice,
+                setCalendarCustomPrice,
+                newGithubProfile,
+                updateGithubProfile,
+                newGithubIssue,
+            }}
+        >
+            {children}
+        </SollinkedContext.Provider>
+    )
 }
