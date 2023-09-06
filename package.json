@@ -11,10 +11,12 @@
   "author": "Kida",
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^18.2.21",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "axios": "^1.5.0",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "react": "^18.2.0"
   }
 }

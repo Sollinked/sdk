@@ -15,7 +15,7 @@ export const setTiers = async(id: number, params: UpdateMailTierParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }
 
@@ -26,7 +26,7 @@ export const claim = async(id: number, params: ClaimSpecificMailParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 
 }
@@ -38,7 +38,7 @@ export const claimAll = async(id: number, params: ClaimAllMailParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 
 }

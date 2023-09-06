@@ -43,7 +43,7 @@ export interface UpdateGitHubSettingParams extends AuthCallParams {
     repo_link: string;
     behavior: "mark" | "close";
 }
-export interface NewGithubIssueParams extends AuthCallParams {
+export interface NewGithubIssueParams {
     repo_link: string;
     txHash: string;
     title: string;

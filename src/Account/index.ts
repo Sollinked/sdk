@@ -9,7 +9,7 @@ export const create = async(params: UserCreateParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }
 
@@ -20,7 +20,7 @@ export const me = async(params: AuthCallParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }
 
@@ -31,7 +31,7 @@ export const get = async({ username }: { username: string }) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }
 
@@ -42,6 +42,6 @@ export const update = async(id: number, params: UserUpdateParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }

@@ -10,7 +10,7 @@ export const setPresetPrice = async(id: number, params: UserReservationSetting[]
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }
 
@@ -27,7 +27,7 @@ export const setCustomPrice = async(params: UpdateUserReservationParams) => {
     }
 
     catch(e: any) {
-        return e.response;
+        return e.response.data as string;
     }
 }
 
