@@ -1,3 +1,5 @@
+import { AuthCallParams } from "../../types";
+
 export type UserGithubSetting = {
     id: number;
     user_id: number;
@@ -28,4 +30,24 @@ export type UserGithubIssueLog = {
     from_email: string;
     title: string;
     body: string;
+}
+
+export interface CreateGitHubSettingParams extends AuthCallParams {
+    user_id: number;
+    repo_link: string;
+}
+
+export interface UpdateGitHubSettingParams extends AuthCallParams {
+    tiers: UserGithubTier[];
+    whitelists: string[];
+    repo_link: string;
+    behavior: "mark" | "close";
+}
+export interface NewGithubIssueParams extends AuthCallParams {
+    repo_link: string;
+    txHash: string;
+    title: string;
+    body: string;
+    fromEmail?: string;
+    fromUser?: string;
 }

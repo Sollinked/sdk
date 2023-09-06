@@ -84,12 +84,25 @@ export class SollinkedAuthed {
         return await calendar.setCustomPrice(params);
     }
 
-    // github functions
+    // github 
+    newGithubProfile = async() => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
+        return await github.setTiers();
+    }
+
     setGithubTiers = async() => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
         return await github.setTiers();
     }
 
     newGithubIssue = async() => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
         return await github.newIssue();
     }
 }
