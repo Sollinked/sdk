@@ -1,3 +1,6 @@
+import { Moment } from "moment";
+import { AuthCallParams } from "../../types";
+
 export type UserReservationSetting = {
     user_id: number;
     day: number;
@@ -16,4 +19,10 @@ export type UserReservation = {
     tiplink_public_key: string;
     value_usd?: number;
     status: number;
+}
+
+export interface UpdateUserReservationParams extends AuthCallParams {
+    date: Moment;
+    status: "blocked" | "available";
+    reservation_price?: number;
 }

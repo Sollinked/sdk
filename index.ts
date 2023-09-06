@@ -5,6 +5,7 @@ import * as calendar from './src/Calendar';
 import { AuthCallParams } from "./types";
 import { User, UserUpdateParams } from "./src/Account/types";
 import { MailTier } from "./src/Mail/types";
+import { UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
 
 class UninitializedError extends Error {
     constructor() {
@@ -23,6 +24,7 @@ export class SollinkedAuthed {
             throw Error("Invalid Params");
         }
         this.props = props;
+        this.init();
     }
 
     // initialize
@@ -68,8 +70,18 @@ export class SollinkedAuthed {
     }
 
     // calendar functions
-    setCalendarTiers = async() => {
-        return await calendar.setTiers();
+    setCalendarPresetPrice = async(params: UserReservationSetting[]) => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
+        return await calendar.setPresetPrice(this.user.id, params);
+    }
+
+    setCalendarCustomPrice = async(params: UpdateUserReservationParams) => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
+        return await calendar.setCustomPrice(params);
     }
 
     // github functions
