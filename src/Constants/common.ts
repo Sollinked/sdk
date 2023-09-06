@@ -1,0 +1,1 @@
+export const SOLLINKED_BACKEND_URL = "https://be.sollinked.com";
