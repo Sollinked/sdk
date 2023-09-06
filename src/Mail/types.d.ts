@@ -1,3 +1,5 @@
+import { AuthCallParams } from "../../types";
+
 export type MailTier = {
     value_usd: number;
     respond_days: number;
@@ -21,6 +23,17 @@ export type Mail = {
     expiry_date?: string;
 }
 
-export type getMailParams = {
+export type GetMailParams = {
     type: "claimed" | "unclaimed" | "expired" | "pending_deposit" | "pending_response" | "claimable" | "all";
+}
+
+export interface UpdateMailTierParams extends AuthCallParams {
+    tiers: MailTier[];
+}
+export interface ClaimSpecificMailParams extends AuthCallParams {
+    mailId: number;
+    claimToAddress?: string;
+}
+export interface ClaimAllMailParams extends AuthCallParams {
+    claimToAddress?: string;
 }

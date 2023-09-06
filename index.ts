@@ -4,6 +4,7 @@ import * as github from './src/Github';
 import * as calendar from './src/Calendar';
 import { AuthCallParams } from "./types";
 import { User, UserUpdateParams } from "./src/Account/types";
+import { MailTier } from "./src/Mail/types";
 
 class UninitializedError extends Error {
     constructor() {
@@ -43,8 +44,27 @@ export class SollinkedAuthed {
     }
 
     // mail functinos
-    setMailTiers = async() => {
-        return await mail.setTiers();
+    setMailTiers = async(tiers: MailTier[]) => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
+        return await mail.setTiers(this.user.id, {...this.props, tiers});
+    }
+
+    claimMail = async(id: number, claimToAddress?: string) => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
+        return await mail.claim(this.user.id, {...this.props, mailId: id, claimToAddress });
+
+    }
+
+    claimAllMail = async(claimToAddress?: string) => {
+        if(!this.user) {
+            throw new UninitializedError();
+        }
+        return await mail.claimAll(this.user.id, {...this.props, claimToAddress});
+
     }
 
     // calendar functions

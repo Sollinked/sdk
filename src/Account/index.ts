@@ -38,7 +38,7 @@ export const get = async({ username }: { username: string }) => {
 // update personal details
 export const update = async(id: number, params: UserUpdateParams) => {
     try {
-        return await axios.post<ApiResult<string>>(`/user/update/${id}`, params);
+        return await axios.post<ApiResult<undefined>>(`/user/update/${id}`, params);
     }
 
     catch(e: any) {
