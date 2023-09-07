@@ -4,14 +4,13 @@
   
       /* Basic Options */
       // "incremental": true,                         /* Enable incremental compilation */
-      "target": "es6",                                /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
-
-      "module": "esnext",
+      "target": "ESNEXT",                                /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
+      "module": "ESNEXT",
       "moduleResolution": "node",
       "lib": ["DOM", "ES6", "DOM.Iterable", "ScriptHost", "ES2016.Array.Include"],
       // "allowJs": true,                             /* Allow javascript files to be compiled. */
       // "checkJs": true,                             /* Report errors in .js files. */
-      "jsx": "react",                           /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
+      "jsx": "react-jsx",                           /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
       "declaration": true,                         /* Generates corresponding '.d.ts' file. */
       // "declarationMap": true,                      /* Generates a sourcemap for each corresponding '.d.ts' file. */
       // "sourceMap": true,                           /* Generates corresponding '.map' file. */
