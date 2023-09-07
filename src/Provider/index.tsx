@@ -375,8 +375,8 @@ export const Provider = ({
                 },
 
                 calendar: {
-                    setCustomPrice: setCalendarCustomPrice,
                     setPresetPrice: setCalendarPresetPrice,
+                    setCustomPrice: setCalendarCustomPrice,
                 },
 
                 github: {

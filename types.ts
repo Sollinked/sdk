@@ -1,7 +1,10 @@
 import { ReactNode } from "react";
 import { User, UserUpdateParams } from "./src/Account/types";
+import { UpdateIntegrationParams } from "./src/Integration/types";
 import { UpdateUserReservationParams, UserReservationSetting } from "./src/Calendar/types";
-import { CreateGitHubSettingParams, UpdateGitHubSettingParams } from "./src/Github/types";
+import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
+import { AxiosResponse } from "axios";
+import { MailTier } from "./src/Mail/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -35,10 +38,10 @@ export type SollinkedContextState = {
     signature: string;
     isVerified: boolean;
     isVerifying: boolean;
-    init?: (customSignature?: string) => Promise<string | AxiosResponse<ApiResult<User>, any> | undefined>;
+    init?: (customSignature?: string) => Promise<User | undefined>;
     account?: {
-        me: (customSignature?: string) => Promise<string | AxiosResponse<ApiResult<User>, any> | undefined>;
-        create: (username: string) => Promise<string | AxiosResponse<ApiResult<User>, any> | undefined>;
+        me: (customSignature?: string) => Promise<User | undefined>;
+        create: (username: string) => Promise<User | undefined>;
         update: (params: Omit<UserUpdateParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
     },
     mail?: {
@@ -47,12 +50,12 @@ export type SollinkedContextState = {
         claimAll: (claimToAddress?: string) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
     },
     calendar?: {
-        setPresetPrice: (params: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any>>;
-        setCustomPrice: (params: Omit<UpdateUserReservationParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any>>;
+        setPresetPrice: (reservationSettings: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        setCustomPrice: (params: Omit<UpdateUserReservationParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
     },
     github?: {
-        create: (params: Omit<CreateGitHubSettingParams, "address" | "message" | "signature" | "user_id">) => Promise<string | AxiosResponse<ApiResult<string>, any>>;
-        update: (githubSettingId: number, params: Omit<UpdateGitHubSettingParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<string>, any>>;
+        create: (params: Omit<CreateGitHubSettingParams, "address" | "message" | "signature" | "user_id">) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
+        update: (githubSettingId: number, params: Omit<UpdateGitHubSettingParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
         toggle: (githubSettingId: number) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
         newIssue: (params: NewGithubIssueParams) => Promise<string | AxiosResponse<ApiResult<string>, any>>;
         delete: (githubSettingId: number) => Promise<string | AxiosResponse<any, any> | undefined>;

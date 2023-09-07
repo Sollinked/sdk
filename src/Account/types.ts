@@ -1,6 +1,7 @@
 import { AuthCallParams } from "../../types";
 import { UserReservation, UserReservationSetting } from "../Calendar/types";
 import { UserGithubSetting } from "../Github/types";
+import { Webhook } from "../Integration/types";
 import { Mail, MailTier } from "../Mail/types";
 
 export type User = {
