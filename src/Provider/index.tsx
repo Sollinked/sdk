@@ -3,6 +3,7 @@ import * as mail from '../Mail';
 import * as github from '../Github';
 import * as calendar from '../Calendar';
 import * as integration from '../Integration';
+import React from 'react';
 import { ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams } from "../Account/types";
 import { MailTier } from "../Mail/types";
