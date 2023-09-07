@@ -1,6 +1,6 @@
 {
   "name": "@sollinked/sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SDK for Sollinked",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,6 +10,11 @@
   },
   "author": "Kida",
   "license": "MIT",
+  "browserslist": [
+      ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "peerDependencies": {
     "@types/react": "*",
     "@types/react-dom": "*",
