@@ -1,5 +1,5 @@
-import { ApiResult } from "../../types";
-import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams } from "./types";
+import { ApiResult, AuthCallParams } from "../../types";
+import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./types";
 import axios from '../Services/axios';
 
 // creates github setting
@@ -22,6 +22,37 @@ export const update = async(settingId: number, params: UpdateGitHubSettingParams
     catch(e: any) {
         return e.response.data as string;
     }
+}
+
+// toggle github status
+export const toggle = async(settingId: number, params: AuthCallParams) => {
+    try {
+        return await axios.post<ApiResult<string>>(`/gitgud/toggle/${settingId}`, params);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+// delete github setting
+export const del = async(settingId: number, params: AuthCallParams) => {
+    try {
+        return  await axios({
+            url: `/gitgud/${settingId}`,
+            method: 'DELETE',
+            data: params,
+        });
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+//public functions
+export const get = async(owner: string, repo: string) => {
+    return await axios.get<ApiResult<{ tiers: UserGithubTier[], address: string }>>(`/gitgud/tiers/${owner}/${repo}`);
 }
 
 // opens new issue

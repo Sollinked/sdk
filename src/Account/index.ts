@@ -1,6 +1,7 @@
 import { ApiResult, AuthCallParams } from "../../types";
 import axios from '../Services/axios';
 import { PublicUser, User, UserCreateParams, UserUpdateParams } from "./types";
+import _ from 'lodash';
 
 // register account
 export const create = async(params: UserCreateParams) => {
@@ -9,6 +10,7 @@ export const create = async(params: UserCreateParams) => {
     }
 
     catch(e: any) {
+        console.log(e);
         return e.response.data as string;
     }
 }
@@ -38,7 +40,39 @@ export const get = async({ username }: { username: string }) => {
 // update personal details
 export const update = async(id: number, params: UserUpdateParams) => {
     try {
-        return await axios.post<ApiResult<undefined>>(`/user/update/${id}`, params);
+
+        let omitted = _(params).omit("id").value();
+        let formData = new FormData();
+        for(let [key, value] of Object.entries(omitted)) {
+            // social is not needed
+            if(key === "social") {
+                continue;
+            }
+
+            // omit address
+            if(value === null) {
+                continue;
+            }
+
+            if(value === undefined) {
+                continue;
+            }
+
+            if(typeof value === "number") {
+                value = value.toString();
+            }
+
+            formData.append(key, value as string | Blob);
+        }
+        
+        return await axios<ApiResult<undefined>>({
+            url: `/user/update/${id}`,
+            method: 'POST',
+            data: formData,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        });
     }
 
     catch(e: any) {

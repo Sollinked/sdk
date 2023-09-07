@@ -21,7 +21,7 @@ export type User = {
     mails?: Mail[];
     reservations?: UserReservation[];
     reservationSettings?: UserReservationSetting[];
-    // webhooks?: Webhook[]; -- not now
+    webhooks?: Webhook[];
     githubSettings?: UserGithubSetting[];
 }
 
@@ -34,7 +34,7 @@ export interface UserUpdateParams extends AuthCallParams {
     calendar_advance_days?: number;
     display_name?: string;
     email_address?: string;
-    profile_picture?: Blob;
+    profile_picture?: File;
     facebook?: string;
     instagram?: string;
     twitter?: string;

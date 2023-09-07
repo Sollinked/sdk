@@ -1,6 +1,6 @@
-import { ClaimAllMailParams, ClaimSpecificMailParams, MailTier, UpdateMailTierParams } from "./types"
+import { ClaimAllMailParams, ClaimSpecificMailParams, UpdateMailTierParams } from "./types"
 import axios from '../Services/axios';
-import { ApiResult, AuthCallParams } from "../../types";
+import { ApiResult } from "../../types";
 
 // get mails
 // unused

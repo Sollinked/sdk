@@ -26,3 +26,7 @@ export interface UpdateUserReservationParams extends AuthCallParams {
     status: "blocked" | "available";
     reservation_price?: number;
 }
+
+export interface UpdatePresetPriceParams extends AuthCallParams {
+    reservationSettings: UserReservationSetting[]
+}
