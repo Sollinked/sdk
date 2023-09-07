@@ -43,16 +43,7 @@ export const SollinkedContext = createContext<SollinkedContextState>({
     signature: "",
     isVerified: false,
     isVerifying: false,
-    me: undefined,
     init: undefined,
-    updateAccount: undefined,
-    setMailTiers: undefined,
-    claimMail: undefined,
-    claimAllMail: undefined,
-    setCalendarPresetPrice: undefined,
-    setCalendarCustomPrice: undefined,
-    createGithubProfile: undefined,
-    updateGithubProfile: undefined,
 });
 
 export const useSollinked = () => {
@@ -368,32 +359,39 @@ export const Provider = ({
                 isVerified,
                 isVerifying,
 
-                // user
-                me,
                 init,
-                createAccount,
-                updateAccount,
 
-                // mail
-                setMailTiers,
-                claimMail,
-                claimAllMail,
+                // user
+                account: {
+                    me,
+                    create: createAccount,
+                    update: updateAccount,
+                },
 
-                // calendar
-                setCalendarPresetPrice,
-                setCalendarCustomPrice,
+                mail: {
+                    setTiers: setMailTiers,
+                    claim: claimMail,
+                    claimAll: claimAllMail,
+                },
 
-                // github
-                createGithubProfile,
-                updateGithubProfile,
-                toggleGitHubProfileStatus,
-                newGithubIssue,
-                deleteGithubProfile,
-                getGithubDetails,
+                calendar: {
+                    setCustomPrice: setCalendarCustomPrice,
+                    setPresetPrice: setCalendarPresetPrice,
+                },
 
-                // integration
-                updateIntegration,
-                testIntegration
+                github: {
+                    create: createGithubProfile,
+                    update: updateGithubProfile,
+                    toggle: toggleGitHubProfileStatus,
+                    get: getGithubDetails,
+                    newIssue: newGithubIssue,
+                    delete: deleteGithubProfile,
+                },
+
+                integration: {
+                    update: updateIntegration,
+                    test: testIntegration,
+                }
             }}
         >
             {children}
