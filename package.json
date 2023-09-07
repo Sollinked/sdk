@@ -2,21 +2,28 @@
   "name": "sdk",
   "version": "1.0.0",
   "description": "SDK for Sollinked",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kida",
   "license": "MIT",
-  "devDependencies": {
-    "@types/react": "^18.2.21",
-    "typescript": "^5.2.2"
+  "peerDependencies": {
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "react": "*",
+    "react-cookie": "*",
+    "react-dom": "*",
+    "typescript": "*"
   },
   "dependencies": {
     "axios": "^1.5.0",
-    "moment": "^2.29.4",
-    "react": "^18.2.0"
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.198"
   }
 }
