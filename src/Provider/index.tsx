@@ -138,9 +138,11 @@ const Provider = ({
         }
 
         let user = userRes.data.data;
+        let signatures = cookies['signatures'];
+        setCookie("signatures", { ...signatures, [auth.address]: sigToVerify }, { path: '/' });
         setUser(user ?? DEFAULT_USER);
         return user;
-    }, [ auth, signature ]);
+    }, [ auth, signature, cookies ]);
 
     // updates the account
     const updateAccount = useCallback(async(params: Omit<UserUpdateParams, "address" | "message" | "signature">) => {
@@ -154,6 +156,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await account.update(user.id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -170,6 +175,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await mail.setTiers(user.id, {address, message, signature, tiers});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, signature, auth, me ]);
@@ -185,6 +193,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await mail.claim(user.id, {address, message, signature, mailId: id, claimToAddress });
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, signature, auth, me ]);
@@ -200,6 +211,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await mail.claimAll(user.id, {address, message, signature, claimToAddress});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, signature, auth, me ]);
@@ -216,6 +230,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await calendar.setPresetPrice(user.id, {address, message, signature, reservationSettings});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -231,6 +248,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await calendar.setCustomPrice({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -247,6 +267,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await github.create({...params, address, message, signature, user_id: user.id});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -262,6 +285,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await github.update(githubSettingId, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -277,6 +303,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await github.del(githubSettingId, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -292,6 +321,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await github.toggle(githubSettingId, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -316,6 +348,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await integration.update(webhookId, {...params, address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
@@ -331,6 +366,9 @@ const Provider = ({
 
         let { address, message } = auth;
         let res = await integration.test(webhookId, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
         await me();
         return res;
     }, [ user, auth, signature, me ]);
