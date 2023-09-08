@@ -1,6 +1,6 @@
 {
   "name": "@sollinked/sdk",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "SDK for Sollinked",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "tsc && npm publish"
   },
   "author": "Kida",
   "license": "MIT",
