@@ -125,13 +125,14 @@ const Provider = ({
     }, [ auth, signature, cookies, setCookie ]);
 
     // create the account
-    const createAccount = useCallback(async(username: string) => {
-        if(!auth.address || !auth.message || !signature) {
+    const createAccount = useCallback(async(username: string, customSignature?: string) => {
+        let sigToVerify = customSignature ?? signature;
+        if(!auth.address || !auth.message || !sigToVerify) {
             return;
         }
 
         let { address, message } = auth;
-        let userRes = await account.create({address, message, signature, username});
+        let userRes = await account.create({address, message, signature: sigToVerify, username});
         if(!userRes || typeof userRes === 'string') {
             return;
         }
@@ -344,7 +345,7 @@ const Provider = ({
         let res = await me(customSignature);
 
         if(!res) {
-            res = await createAccount(auth.address);
+            res = await createAccount(auth.address, customSignature);
         }
         setIsVerifying(false);
         setUser(res ?? DEFAULT_USER);
