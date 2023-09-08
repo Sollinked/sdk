@@ -1,6 +1,6 @@
 import { ApiResult, AuthCallParams } from "../../types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./types";
-import axios from '../Services/axios';
+import axios from '../Services/axios.js';
 
 // creates github setting
 export const create = async(params: CreateGitHubSettingParams) => {

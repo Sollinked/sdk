@@ -1,7 +1,7 @@
 import { ApiResult } from '../../types';
-import { convertToUtcDayAndHour } from '../../utils';
+import { convertToUtcDayAndHour } from '../../utils.js';
 import { RESERVATION_STATUS_AVAILABLE, RESERVATION_STATUS_BLOCKED } from '../Constants/common';
-import axios from '../Services/axios';
+import axios from '../Services/axios.js';
 import { UpdatePresetPriceParams, UpdateUserReservationParams } from './types';
 
 // sets the calendar's tiers

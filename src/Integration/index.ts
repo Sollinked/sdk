@@ -1,5 +1,5 @@
 import { ApiResult, AuthCallParams } from '../../types';
-import axios from '../Services/axios';
+import axios from '../Services/axios.js';
 import { UpdateIntegrationParams } from './types';
 
 // set custom price

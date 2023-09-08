@@ -1,5 +1,5 @@
 import { ApiResult, AuthCallParams } from "../../types";
-import axios from '../Services/axios';
+import axios from '../Services/axios.js';
 import { PublicUser, User, UserCreateParams, UserUpdateParams } from "./types";
 import _ from 'lodash';
 

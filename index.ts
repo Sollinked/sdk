@@ -1,4 +1,4 @@
-export * from './src/Provider';
+export * from './src/Provider/index.js';
 
 // import * as account from "./src/Account";
 // import * as mail from './src/Mail';

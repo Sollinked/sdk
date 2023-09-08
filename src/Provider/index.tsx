@@ -1,8 +1,8 @@
-import * as account from "../Account";
-import * as mail from '../Mail';
-import * as github from '../Github';
-import * as calendar from '../Calendar';
-import * as integration from '../Integration';
+import * as account from "../Account/index.js";
+import * as mail from '../Mail/index.js';
+import * as github from '../Github/index.js';
+import * as calendar from '../Calendar/index.js';
+import * as integration from '../Integration/index.js';
 import { ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams } from "../Account/types";
 import { MailTier } from "../Mail/types";
@@ -10,7 +10,7 @@ import { UpdateUserReservationParams, UserReservationSetting } from "../Calendar
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams } from "../Github/types";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { useCookies } from 'react-cookie';
-import { convertToLocalDayAndHour } from "../../utils";
+import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
 
 class UninitializedError extends Error {
@@ -38,7 +38,7 @@ const DEFAULT_USER = {
 };
 
 // react's version
-export const SollinkedContext = createContext<SollinkedContextState>({
+const SollinkedContext = createContext<SollinkedContextState>({
     user: DEFAULT_USER,
     signature: "",
     isVerified: false,
@@ -46,11 +46,11 @@ export const SollinkedContext = createContext<SollinkedContextState>({
     init: undefined,
 });
 
-export const useSollinked = () => {
+const useSollinked = () => {
     return useContext(SollinkedContext);
 }
 
-export const Provider = ({
+const Provider = ({
     children,
     auth
 }: ProviderProps) => {
@@ -398,3 +398,5 @@ export const Provider = ({
         </SollinkedContext.Provider>
     )
 }
+
+export { useSollinked, Provider }

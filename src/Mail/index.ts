@@ -1,5 +1,5 @@
 import { ClaimAllMailParams, ClaimSpecificMailParams, UpdateMailTierParams } from "./types"
-import axios from '../Services/axios';
+import axios from '../Services/axios.js';
 import { ApiResult } from "../../types";
 
 // get mails
