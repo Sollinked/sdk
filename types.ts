@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { User, UserUpdateParams } from "./src/Account/types";
+import { HomepageUser, PublicUser, User, UserUpdateParams } from "./src/Account/types";
 import { UpdateIntegrationParams } from "./src/Integration/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
@@ -43,6 +43,9 @@ export type SollinkedContextState = {
         me: (customSignature?: string) => Promise<User | undefined>;
         create: (username: string) => Promise<User | undefined>;
         update: (params: Omit<UserUpdateParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        getHomepageUsers: () => Promise<string | HomepageUser[]>;
+        get: (username: string) => Promise<string | PublicUser>;
+        search: (username: string) => Promise<string | HomepageUser[]>;
     },
     mail?: {
         setTiers: (tiers: MailTier[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

@@ -24,6 +24,7 @@ export type User = {
     reservationSettings?: UserReservationSetting[];
     webhooks?: Webhook[];
     githubSettings?: UserGithubSetting[];
+    is_verified: boolean;
 }
 
 export interface UserCreateParams extends AuthCallParams {
@@ -43,6 +44,7 @@ export interface UserUpdateParams extends AuthCallParams {
     tiktok?: string;
     youtube?: string;
 }
+
 export type PublicUser = {
     id: number;
     username: string;
@@ -56,4 +58,13 @@ export type PublicUser = {
     youtube: string;
     calendar_advance_days: number;
     tiers?: MailTier[];
+    is_verified: boolean;
+}
+
+export type HomepageUser = {
+    username: string;
+    display_name: string;
+    profile_picture?: string;
+    value_usd: number;
+    is_verified: boolean;
 }

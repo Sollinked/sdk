@@ -35,6 +35,7 @@ const DEFAULT_USER = {
     tiktok: "",
     youtube: "",
     tiers: [],
+    is_verified: false,
 };
 
 // react's version
@@ -162,6 +163,46 @@ const Provider = ({
         await me();
         return res;
     }, [ user, auth, signature, me ]);
+
+    const getHomepageUsers = useCallback(async() => {
+        let res = await account.getHomepageUsers();
+        if(typeof res === 'string') {
+            return res;
+        }
+
+        if(!res.data.data) {
+            return "Unable to get users";
+        }
+
+        return res.data.data;
+    }, []);
+
+    const searchUser = useCallback(async(username: string) => {
+        let res = await account.search(username);
+        if(typeof res === 'string') {
+            return res;
+        }
+
+        if(!res.data.data) {
+            return "Unable to get users";
+        }
+
+        return res.data.data;
+
+    }, []);
+
+    const getUser = useCallback(async(username: string) => {
+        let res = await account.get(username);
+        if(typeof res === 'string') {
+            return res;
+        }
+
+        if(!res.data.data) {
+            return "Unable to get users";
+        }
+
+        return res.data.data;
+    }, []);
 
     // mail functinos
     const setMailTiers = useCallback(async(tiers: MailTier[]) => {
@@ -414,6 +455,9 @@ const Provider = ({
                     me,
                     create: createAccount,
                     update: updateAccount,
+                    getHomepageUsers,
+                    get: getUser,
+                    search: searchUser,
                 },
 
                 mail: {

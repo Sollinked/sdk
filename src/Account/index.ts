@@ -1,6 +1,6 @@
 import { ApiResult, AuthCallParams } from "../../types";
 import axios from '../Services/axios.js';
-import { PublicUser, User, UserCreateParams, UserUpdateParams } from "./types";
+import { HomepageUser, PublicUser, User, UserCreateParams, UserUpdateParams } from "./types";
 import _ from 'lodash';
 
 // register account
@@ -27,9 +27,19 @@ export const me = async(params: AuthCallParams) => {
 }
 
 // get public profile
-export const get = async({ username }: { username: string }) => {
+export const get = async(username: string) => {
     try {
         return await axios.get<ApiResult<PublicUser>>(`/user/username/${username}`);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+export const search = async(username: string) => {
+    try {
+        return await axios.get<ApiResult<HomepageUser[]>>(`/user/search/${username}`);
     }
 
     catch(e: any) {
@@ -73,6 +83,17 @@ export const update = async(id: number, params: UserUpdateParams) => {
                 "Content-Type": "multipart/form-data",
             }
         });
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+// public functions
+export const getHomepageUsers = async() => {
+    try {
+        return await axios.get<ApiResult<HomepageUser[]>>(`/user/homepageUsers`);
     }
 
     catch(e: any) {
