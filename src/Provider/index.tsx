@@ -6,7 +6,7 @@ import * as integration from '../Integration/index.js';
 import { ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams } from "../Account/types";
 import { MailTier } from "../Mail/types";
-import { UpdateUserReservationParams, UserReservationSetting } from "../Calendar/types";
+import { ReserveCalendarParams, UpdateUserReservationParams, UserReservationSetting } from "../Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams } from "../Github/types";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { useCookies } from 'react-cookie';
@@ -255,6 +255,15 @@ const Provider = ({
         return res;
     }, [ user, auth, signature, me ]);
 
+    // public functions
+    const getUserCalendarSettings = useCallback(async(username: string) => {
+        return await calendar.getUserSettings(username);
+    }, []);
+
+    const reserveUserCalendar = useCallback(async(params: ReserveCalendarParams) => {
+        return await calendar.reserve(params);
+    }, []);
+
     // github 
     const createGithubProfile = useCallback(async(params: Omit<CreateGitHubSettingParams, "address" | "message" | "signature" | "user_id">) => {
         if(!user) {
@@ -414,6 +423,8 @@ const Provider = ({
                 },
 
                 calendar: {
+                    get: getUserCalendarSettings,
+                    reserve: reserveUserCalendar,
                     setPresetPrice: setCalendarPresetPrice,
                     setCustomPrice: setCalendarCustomPrice,
                 },

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { User, UserUpdateParams } from "./src/Account/types";
 import { UpdateIntegrationParams } from "./src/Integration/types";
-import { UpdateUserReservationParams, UserReservationSetting } from "./src/Calendar/types";
+import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
 import { AxiosResponse } from "axios";
 import { MailTier } from "./src/Mail/types";
@@ -52,6 +52,17 @@ export type SollinkedContextState = {
     calendar?: {
         setPresetPrice: (reservationSettings: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         setCustomPrice: (params: Omit<UpdateUserReservationParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        get: (username: string) => Promise<string | {
+            reservations: UserReservation[] | undefined;
+            settings: UserReservationSetting[];
+            display_name: string;
+            calendar_advance_days: number;
+        }>;
+        reserve: (params: ReserveCalendarParams) => Promise<string | {
+            value_usd: number;
+            public_key: string;
+            uuid: string;
+        }>;
     },
     github?: {
         create: (params: Omit<CreateGitHubSettingParams, "address" | "message" | "signature" | "user_id">) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;

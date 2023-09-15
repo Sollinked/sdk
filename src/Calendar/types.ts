@@ -30,3 +30,10 @@ export interface UpdateUserReservationParams extends AuthCallParams {
 export interface UpdatePresetPriceParams extends AuthCallParams {
     reservationSettings: UserReservationSetting[]
 }
+
+export interface ReserveCalendarParams {
+    username: string;
+    date: string; // YYYY-MM-DDTHH:mm:ssZ format
+    email: string;
+    title: string;
+}
