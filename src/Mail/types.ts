@@ -37,3 +37,14 @@ export interface ClaimSpecificMailParams extends AuthCallParams {
 export interface ClaimAllMailParams extends AuthCallParams {
     claimToAddress?: string;
 }
+
+export interface NewMailParams {
+    replyToEmail: string;
+}
+export interface OnMailPaymentParams {
+    replyToEmail: string;
+    subject: string;
+    message: string;
+    txHash: string;
+    mailId: number;
+}

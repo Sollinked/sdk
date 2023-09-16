@@ -4,7 +4,7 @@ import { UpdateIntegrationParams } from "./src/Integration/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
 import { AxiosResponse } from "axios";
-import { MailTier } from "./src/Mail/types";
+import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -51,6 +51,11 @@ export type SollinkedContextState = {
         setTiers: (tiers: MailTier[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         claim: (id: number, claimToAddress?: string) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         claimAll: (claimToAddress?: string) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        new: (toUsername: string, params: NewMailParams) => Promise<string | {
+            mailId: number;
+            depositTo: string;
+        } | undefined>;
+        onPayment: (toUsername: string, params: OnMailPaymentParams) => Promise<string | undefined>;
     },
     calendar?: {
         setPresetPrice: (reservationSettings: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

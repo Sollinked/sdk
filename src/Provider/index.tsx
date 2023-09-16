@@ -5,7 +5,7 @@ import * as calendar from '../Calendar/index.js';
 import * as integration from '../Integration/index.js';
 import { ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams } from "../Account/types";
-import { MailTier } from "../Mail/types";
+import { MailTier, NewMailParams, OnMailPaymentParams } from "../Mail/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservationSetting } from "../Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams } from "../Github/types";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
@@ -259,6 +259,24 @@ const Provider = ({
         return res;
     }, [ user, signature, auth, me ]);
 
+    const newMail = useCallback(async(toUsername: string, params: NewMailParams) => {
+        let res = await mail.newMail(toUsername, params);
+        if(typeof res === 'string') {
+            return res;
+        } 
+
+        return res.data.data;
+    }, [ ]);
+
+    const onMailPayment = useCallback(async(toUsername: string, params: OnMailPaymentParams) => {
+        let res = await mail.onMailPayment(toUsername, params);
+        if(typeof res === 'string') {
+            return res;
+        } 
+
+        return res.data.data;
+    }, [ ]);
+
     // calendar functions
     const setCalendarPresetPrice = useCallback(async(reservationSettings: UserReservationSetting[]) => {
         if(!user) {
@@ -464,6 +482,8 @@ const Provider = ({
                     setTiers: setMailTiers,
                     claim: claimMail,
                     claimAll: claimAllMail,
+                    new: newMail,
+                    onPayment: onMailPayment,
                 },
 
                 calendar: {
