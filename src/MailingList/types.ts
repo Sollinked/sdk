@@ -4,6 +4,7 @@ export type MailingList = {
     id: number;
     user_id: number;
     product_id: string;
+    wallet_id: string;
     tiers: MailingListPriceTier[];
 }
 
@@ -11,6 +12,7 @@ export type MailingListPriceTier = {
     id: number;
     mailing_list_id: number;
     price_id: string;
+    paymentlink_id: string;
     name: string;
     description?: string;
     amount: number;
