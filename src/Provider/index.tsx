@@ -3,6 +3,7 @@ import * as mail from '../Mail/index.js';
 import * as github from '../Github/index.js';
 import * as calendar from '../Calendar/index.js';
 import * as integration from '../Integration/index.js';
+import * as mailingList from '../MailingList/index.js';
 import { ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams } from "../Account/types";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "../Mail/types";
@@ -12,6 +13,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { useCookies } from 'react-cookie';
 import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
+import { UpdateMailingListPriceListParams } from "../MailingList/types.js";
 
 class UninitializedError extends Error {
     constructor() {
@@ -277,6 +279,53 @@ const Provider = ({
         return res.data.data;
     }, [ ]);
 
+    // mailing lists
+    const newMailingList = useCallback(async() => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+        let res = await mailingList.create({address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const updateMailingListPriceTiers = useCallback(async(id: number, params: Omit<UpdateMailingListPriceListParams, "address" | "message" | "signature">) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        // create new mailing list if id is 0 or id is not present
+        if(!id) {
+            console.log('creating new list')
+            let res = await newMailingList();
+            if(typeof res === 'string') {
+                return res;
+            }
+        }
+
+        let res = await mailingList.updateTiers({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
     // calendar functions
     const setCalendarPresetPrice = useCallback(async(reservationSettings: UserReservationSetting[]) => {
         if(!user) {
@@ -484,6 +533,11 @@ const Provider = ({
                     claimAll: claimAllMail,
                     new: newMail,
                     onPayment: onMailPayment,
+                },
+
+                mailingList: {
+                    create: newMailingList,
+                    updateTiers: updateMailingListPriceTiers
                 },
 
                 calendar: {

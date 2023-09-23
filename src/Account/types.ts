@@ -3,6 +3,7 @@ import { UserReservation, UserReservationSetting } from "../Calendar/types";
 import { UserGithubSetting } from "../Github/types";
 import { Webhook } from "../Integration/types";
 import { Mail, MailTier } from "../Mail/types";
+import { MailingList } from "../MailingList/types";
 
 export type User = {
     id: number;
@@ -20,6 +21,7 @@ export type User = {
     youtube: string;
     tiers?: MailTier[];
     mails?: Mail[];
+    mailingList?: MailingList;
     reservations?: UserReservation[];
     reservationSettings?: UserReservationSetting[];
     webhooks?: Webhook[];
