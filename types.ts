@@ -5,7 +5,7 @@ import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, Us
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
 import { AxiosResponse } from "axios";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
-import { UpdateMailingListPriceListParams } from "./src/MailingList/types";
+import { MailingList, UpdateMailingListPriceListParams } from "./src/MailingList/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -61,6 +61,10 @@ export type SollinkedContextState = {
     mailingList?: {
         create: () => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         updateTiers: (id: number, params: Omit<UpdateMailingListPriceListParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        get: (username: string) => Promise<string | {
+            list: MailingList | undefined;
+            display_name: string;
+        }>;
     }
     calendar?: {
         setPresetPrice: (reservationSettings: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

@@ -166,6 +166,7 @@ const Provider = ({
         return res;
     }, [ user, auth, signature, me ]);
 
+    // user public functions
     const getHomepageUsers = useCallback(async() => {
         let res = await account.getHomepageUsers();
         if(typeof res === 'string') {
@@ -325,6 +326,11 @@ const Provider = ({
         await me();
         return res;
     }, [user, auth, signature, me]);
+
+    // mailing list public functions
+    const getUserMailingList = useCallback(async(username: string) => {
+        return await mailingList.get(username);
+    }, []);
 
     // calendar functions
     const setCalendarPresetPrice = useCallback(async(reservationSettings: UserReservationSetting[]) => {
@@ -537,7 +543,8 @@ const Provider = ({
 
                 mailingList: {
                     create: newMailingList,
-                    updateTiers: updateMailingListPriceTiers
+                    updateTiers: updateMailingListPriceTiers,
+                    get: getUserMailingList,
                 },
 
                 calendar: {
