@@ -19,6 +19,7 @@ export type MailingListPriceTier = {
     currency: string;
     charge_every: number;
     prepay_month: number;
+    subscriber_count: number;
     is_active: boolean;
 }
 
