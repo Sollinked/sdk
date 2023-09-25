@@ -3,7 +3,7 @@ import { UserReservation, UserReservationSetting } from "../Calendar/types";
 import { UserGithubSetting } from "../Github/types";
 import { Webhook } from "../Integration/types";
 import { Mail, MailTier } from "../Mail/types";
-import { MailingList } from "../MailingList/types";
+import { MailingList, MailingListBroadcast } from "../MailingList/types";
 
 export type User = {
     id: number;
@@ -22,6 +22,7 @@ export type User = {
     tiers?: MailTier[];
     mails?: Mail[];
     mailingList?: MailingList;
+    broadcasts?: MailingListBroadcast[];
     reservations?: UserReservation[];
     reservationSettings?: UserReservationSetting[];
     webhooks?: Webhook[];

@@ -1,4 +1,4 @@
-import { CreateMailingListParams, MailingList, UpdateMailingListPriceListParams } from "./types"
+import { BroadcastParams, CreateMailingListParams, MailingList, RetryBroadcastParams, UpdateMailingListPriceListParams } from "./types"
 import axios from '../Services/axios.js';
 import { ApiResult } from "../../types";
 
@@ -26,9 +26,19 @@ export const updateTiers = async(params: UpdateMailingListPriceListParams) => {
 }
 
 // broadcast
-export const newBroadcast = async(params: any) => {
+export const broadcast = async(params: BroadcastParams) => {
     try {
-        return await axios.post<ApiResult<{ mailId: number, depositTo: string }>>(`/broadcast`, params);
+        return await axios.post<ApiResult<undefined>>(`/mailingList/broadcast`, params);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+export const retry = async(id: number, params: RetryBroadcastParams) => {
+    try {
+        return await axios.post<ApiResult<undefined>>(`/mailingList/retry/${id}`, params);
     }
 
     catch(e: any) {

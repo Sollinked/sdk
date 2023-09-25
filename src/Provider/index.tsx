@@ -13,7 +13,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { useCookies } from 'react-cookie';
 import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
-import { UpdateMailingListPriceListParams } from "../MailingList/types.js";
+import { BroadcastParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
 
 class UninitializedError extends Error {
     constructor() {
@@ -281,7 +281,7 @@ const Provider = ({
     }, [ ]);
 
     // mailing lists
-    const newMailingList = useCallback(async() => {
+    const newMailingList = useCallback(async(shouldUpdateMe?: boolean) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -295,7 +295,10 @@ const Provider = ({
         if(typeof res === 'string') {
             return res;
         }
-        await me();
+
+        if(shouldUpdateMe) {
+            await me();
+        }
         return res;
     }, [user, auth, signature, me]);
 
@@ -313,13 +316,51 @@ const Provider = ({
         // create new mailing list if id is 0 or id is not present
         if(!id) {
             console.log('creating new list')
-            let res = await newMailingList();
+            let res = await newMailingList(false);
             if(typeof res === 'string') {
                 return res;
             }
         }
 
         let res = await mailingList.updateTiers({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const newBroadcast = useCallback(async(params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.broadcast({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const retryBroadcast = useCallback(async(id: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.retry(id, {address, message, signature});
         if(typeof res === 'string') {
             return res;
         }
@@ -545,6 +586,8 @@ const Provider = ({
                     create: newMailingList,
                     updateTiers: updateMailingListPriceTiers,
                     get: getUserMailingList,
+                    retry: retryBroadcast,
+                    broadcast: newBroadcast,
                 },
 
                 calendar: {
