@@ -8,6 +8,19 @@ export type MailingList = {
     tiers: MailingListPriceTier[];
 }
 
+export type MailingListSubscriber = {
+    id: number;
+    mailing_list_price_tier_id: number;
+    user_id: number;
+    price_id: string;
+    email_address: string;
+    expiry_date: string;
+    is_cancelled: boolean;
+
+    // generated
+    price_tier?: MailingListPriceTier;
+}
+
 export type MailingListPriceTier = {
     id: number;
     mailing_list_id: number;
@@ -21,6 +34,9 @@ export type MailingListPriceTier = {
     prepay_month: number;
     subscriber_count: number;
     is_active: boolean;
+
+    // generated
+    username?: string;
 }
 
 export type MailingListBroadcast = {

@@ -3,7 +3,7 @@ import { UserReservation, UserReservationSetting } from "../Calendar/types";
 import { UserGithubSetting } from "../Github/types";
 import { Webhook } from "../Integration/types";
 import { Mail, MailTier } from "../Mail/types";
-import { MailingList, MailingListBroadcast } from "../MailingList/types";
+import { MailingList, MailingListBroadcast, MailingListSubscriber } from "../MailingList/types";
 
 export type User = {
     id: number;
@@ -23,6 +23,7 @@ export type User = {
     mails?: Mail[];
     mailingList?: MailingList;
     broadcasts?: MailingListBroadcast[];
+    subscriptions?: MailingListSubscriber[];
     reservations?: UserReservation[];
     reservationSettings?: UserReservationSetting[];
     webhooks?: Webhook[];
@@ -61,6 +62,7 @@ export type PublicUser = {
     youtube: string;
     calendar_advance_days: number;
     tiers?: MailTier[];
+    mailingList?: MailingList;
     is_verified: boolean;
 }
 
