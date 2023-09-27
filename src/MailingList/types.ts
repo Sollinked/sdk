@@ -48,12 +48,15 @@ export type MailingListBroadcast = {
     created_at: string;
     execute_at: string;
     is_executing: boolean;
+    is_draft: boolean;
+    updated_at: string;
+    tier_ids?: number[];
     success_count: number;
     total_count: number;
 }
 
 export interface CreateMailingListParams extends AuthCallParams {
-
+    tier_ids?: number[];
 }
 
 export interface UpdateMailingListPriceListParams extends AuthCallParams {
@@ -68,4 +71,10 @@ export interface BroadcastParams extends AuthCallParams {
 
 export interface RetryBroadcastParams extends AuthCallParams {
 
+}
+
+export interface DraftParams extends AuthCallParams {
+    title: string;
+    content: string;
+    tier_ids?: number[];
 }

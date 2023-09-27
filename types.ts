@@ -5,7 +5,7 @@ import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, Us
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
 import { AxiosResponse } from "axios";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
-import { BroadcastParams, MailingList, UpdateMailingListPriceListParams } from "./src/MailingList/types";
+import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, UpdateMailingListPriceListParams } from "./src/MailingList/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -67,6 +67,11 @@ export type SollinkedContextState = {
         }>;
         retry: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         broadcast: (params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        saveDraft: (params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<number>, any> | undefined>;
+        updateDraft: (id: number, params: Omit<DraftParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        testDraft: (id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        broadcastDraft: (id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        getDraft: (id: number) => Promise<string | AxiosResponse<ApiResult<MailingListBroadcast>, any> | undefined>;
     }
     calendar?: {
         setPresetPrice: (reservationSettings: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

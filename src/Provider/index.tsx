@@ -13,7 +13,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { useCookies } from 'react-cookie';
 import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
-import { BroadcastParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
+import { BroadcastParams, DraftParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
 
 class UninitializedError extends Error {
     constructor() {
@@ -368,6 +368,99 @@ const Provider = ({
         return res;
     }, [user, auth, signature, me]);
 
+    const saveBroadcastDraft = useCallback(async(params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.saveDraft({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const updateBroadcastDraft = useCallback(async(id: number, params: Omit<DraftParams, "address" | "message" | "signature">) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.updateDraft(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const testBroadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.testDraft(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, [user, auth, signature]);
+
+    const broadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.broadcastDraft(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const getBroadcastDraft = useCallback(async(id: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.getDraft(id, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, [user, auth, signature]);
+
     // mailing list public functions
     const getUserMailingList = useCallback(async(username: string) => {
         return await mailingList.get(username);
@@ -588,6 +681,11 @@ const Provider = ({
                     get: getUserMailingList,
                     retry: retryBroadcast,
                     broadcast: newBroadcast,
+                    saveDraft: saveBroadcastDraft,
+                    updateDraft: updateBroadcastDraft,
+                    testDraft: testBroadcastDraft,
+                    broadcastDraft: broadcastDraft,
+                    getDraft: getBroadcastDraft,
                 },
 
                 calendar: {
