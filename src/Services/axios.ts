@@ -3,7 +3,7 @@ import { SOLLINKED_BACKEND_URL } from '../Constants/common.js';
 
 export default axios.create({
     baseURL: SOLLINKED_BACKEND_URL,
-    timeout: 30000,
+    timeout: 0, // no timeout
     headers: {
         'Accept': 'application/json',
     },
