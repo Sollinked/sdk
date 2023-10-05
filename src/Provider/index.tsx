@@ -402,9 +402,8 @@ const Provider = ({
         if(typeof res === 'string') {
             return res;
         }
-        await me();
         return res;
-    }, [user, auth, signature, me]);
+    }, [user, auth, signature]);
 
     const testBroadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
         if(!user) {
