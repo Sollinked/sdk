@@ -6,6 +6,8 @@ import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingPar
 import { AxiosResponse } from "axios";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
 import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, UpdateMailingListPriceListParams } from "./src/MailingList/types";
+import { Content, ContentCreateParams, ContentUpdateParams } from "./src/Content/types";
+import { ContentPassCreateParams, ContentPassUpdateParams } from "./src/ContentPass/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -43,7 +45,7 @@ export type SollinkedContextState = {
     account?: {
         me: (customSignature?: string) => Promise<User | undefined>;
         create: (username: string) => Promise<User | undefined>;
-        update: (params: Omit<UserUpdateParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        update: (params: Omit<UserUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         getHomepageUsers: () => Promise<string | HomepageUser[]>;
         get: (username: string) => Promise<string | PublicUser>;
         search: (username: string) => Promise<string | HomepageUser[]>;
@@ -60,22 +62,37 @@ export type SollinkedContextState = {
     },
     mailingList?: {
         create: () => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
-        updateTiers: (id: number, params: Omit<UpdateMailingListPriceListParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        updateTiers: (id: number, params: Omit<UpdateMailingListPriceListParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         get: (username: string) => Promise<string | {
             list: MailingList | undefined;
             display_name: string;
         }>;
         retry: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
-        broadcast: (params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
-        saveDraft: (params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<number>, any> | undefined>;
-        updateDraft: (id: number, params: Omit<DraftParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
-        testDraft: (id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
-        broadcastDraft: (id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        broadcast: (params: Omit<BroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        saveDraft: (params: Omit<BroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<number>, any> | undefined>;
+        updateDraft: (id: number, params: Omit<DraftParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        testDraft: (id: number, params: Omit<BroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        broadcastDraft: (id: number, params: Omit<BroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         getDraft: (id: number) => Promise<string | AxiosResponse<ApiResult<MailingListBroadcast>, any> | undefined>;
-    }
+    },
+    content?: {
+        create: (params: Omit<ContentCreateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        update: (id: number, params: Omit<ContentUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        publish: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        unpublish: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        getDraft: (id: number) => Promise<string | AxiosResponse<ApiResult<Content>, any> | undefined>;
+        get: (username: string, slug: string) => Promise<string | {
+            content: Content | undefined;
+            display_name: string;
+        }>;
+    },
+    contentPass?: {
+        create: (params: Omit<ContentPassCreateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        update: (id: number, params: Omit<ContentPassUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+    },
     calendar?: {
         setPresetPrice: (reservationSettings: UserReservationSetting[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
-        setCustomPrice: (params: Omit<UpdateUserReservationParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        setCustomPrice: (params: Omit<UpdateUserReservationParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         get: (username: string) => Promise<string | {
             reservations: UserReservation[] | undefined;
             settings: UserReservationSetting[];
@@ -89,8 +106,8 @@ export type SollinkedContextState = {
         }>;
     },
     github?: {
-        create: (params: Omit<CreateGitHubSettingParams, "address" | "message" | "signature" | "user_id">) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
-        update: (githubSettingId: number, params: Omit<UpdateGitHubSettingParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
+        create: (params: Omit<CreateGitHubSettingParams, keyof AuthCallParams | "user_id">) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
+        update: (githubSettingId: number, params: Omit<UpdateGitHubSettingParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
         toggle: (githubSettingId: number) => Promise<string | AxiosResponse<ApiResult<string>, any> | undefined>;
         newIssue: (params: NewGithubIssueParams) => Promise<string | AxiosResponse<ApiResult<string>, any>>;
         delete: (githubSettingId: number) => Promise<string | AxiosResponse<any, any> | undefined>;
@@ -100,7 +117,7 @@ export type SollinkedContextState = {
         }>, any>>;
     },
     integration?: {
-        update: (webhookId: number, params: Omit<UpdateIntegrationParams, "address" | "message" | "signature">) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        update: (webhookId: number, params: Omit<UpdateIntegrationParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         test: (webhookId: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
     }
 }

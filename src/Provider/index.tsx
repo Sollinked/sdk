@@ -4,7 +4,9 @@ import * as github from '../Github/index.js';
 import * as calendar from '../Calendar/index.js';
 import * as integration from '../Integration/index.js';
 import * as mailingList from '../MailingList/index.js';
-import { ProviderProps, SollinkedContextState } from "../../types";
+import * as content from '../Content/index.js';
+import * as contentPass from '../ContentPass/index.js';
+import { AuthCallParams, ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams } from "../Account/types";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "../Mail/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservationSetting } from "../Calendar/types";
@@ -14,6 +16,8 @@ import { useCookies } from 'react-cookie';
 import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
 import { BroadcastParams, DraftParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
+import { ContentPassCreateParams, ContentPassUpdateParams } from "../ContentPass/types.js";
+import { ContentCreateParams, ContentUpdateParams } from "../Content/types.js";
 
 class UninitializedError extends Error {
     constructor() {
@@ -148,7 +152,7 @@ const Provider = ({
     }, [ auth, signature, cookies ]);
 
     // updates the account
-    const updateAccount = useCallback(async(params: Omit<UserUpdateParams, "address" | "message" | "signature">) => {
+    const updateAccount = useCallback(async(params: Omit<UserUpdateParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -302,7 +306,7 @@ const Provider = ({
         return res;
     }, [user, auth, signature, me]);
 
-    const updateMailingListPriceTiers = useCallback(async(id: number, params: Omit<UpdateMailingListPriceListParams, "address" | "message" | "signature">) => {
+    const updateMailingListPriceTiers = useCallback(async(id: number, params: Omit<UpdateMailingListPriceListParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -330,7 +334,7 @@ const Provider = ({
         return res;
     }, [user, auth, signature, me]);
 
-    const newBroadcast = useCallback(async(params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+    const newBroadcast = useCallback(async(params: Omit<BroadcastParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -368,7 +372,7 @@ const Provider = ({
         return res;
     }, [user, auth, signature, me]);
 
-    const saveBroadcastDraft = useCallback(async(params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+    const saveBroadcastDraft = useCallback(async(params: Omit<BroadcastParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -387,7 +391,7 @@ const Provider = ({
         return res;
     }, [user, auth, signature, me]);
 
-    const updateBroadcastDraft = useCallback(async(id: number, params: Omit<DraftParams, "address" | "message" | "signature">) => {
+    const updateBroadcastDraft = useCallback(async(id: number, params: Omit<DraftParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -405,7 +409,7 @@ const Provider = ({
         return res;
     }, [user, auth, signature]);
 
-    const testBroadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+    const testBroadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -423,7 +427,7 @@ const Provider = ({
         return res;
     }, [user, auth, signature]);
 
-    const broadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, "address" | "message" | "signature">) => {
+    const broadcastDraft = useCallback(async(id: number, params: Omit<BroadcastParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -465,6 +469,139 @@ const Provider = ({
         return await mailingList.get(username);
     }, []);
 
+    // content functions
+    const createContent = useCallback(async(params: Omit<ContentCreateParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await content.create({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const updateContent = useCallback(async(id: number, params: Omit<ContentUpdateParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await content.update(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, [user, auth, signature]);
+
+    const publishContent = useCallback(async(id: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await content.publish(id, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const unpublishContent = useCallback(async(id: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await content.unpublish(id, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const getContentDraft = useCallback(async(id: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        return await content.getDraft(id, {address, message, signature});
+    }, [user, auth, signature]);
+
+    const getContent = useCallback(async(username: string, slug: string) => {
+        return await content.get(username, slug, {...auth, signature});
+    }, [user, auth, signature]);
+
+    // content pass functions
+    const createContentPass = useCallback(async(params: Omit<ContentPassCreateParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await contentPass.create({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const updateContentPass = useCallback(async(id: number, params: Omit<ContentPassUpdateParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await contentPass.update(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
     // calendar functions
     const setCalendarPresetPrice = useCallback(async(reservationSettings: UserReservationSetting[]) => {
         if(!user) {
@@ -484,7 +621,7 @@ const Provider = ({
         return res;
     }, [ user, auth, signature, me ]);
 
-    const setCalendarCustomPrice = useCallback(async(params: Omit<UpdateUserReservationParams, "address" | "message" | "signature">) => {
+    const setCalendarCustomPrice = useCallback(async(params: Omit<UpdateUserReservationParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -512,7 +649,7 @@ const Provider = ({
     }, []);
 
     // github 
-    const createGithubProfile = useCallback(async(params: Omit<CreateGitHubSettingParams, "address" | "message" | "signature" | "user_id">) => {
+    const createGithubProfile = useCallback(async(params: Omit<CreateGitHubSettingParams, keyof AuthCallParams | "user_id">) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -530,7 +667,7 @@ const Provider = ({
         return res;
     }, [ user, auth, signature, me ]);
 
-    const updateGithubProfile = useCallback(async(githubSettingId: number, params: Omit<UpdateGitHubSettingParams, "address" | "message" | "signature">) => {
+    const updateGithubProfile = useCallback(async(githubSettingId: number, params: Omit<UpdateGitHubSettingParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -593,7 +730,7 @@ const Provider = ({
     }, []);
 
     // integration
-    const updateIntegration = useCallback(async(webhookId: number, params: Omit<UpdateIntegrationParams, "address" | "message" | "signature">) => {
+    const updateIntegration = useCallback(async(webhookId: number, params: Omit<UpdateIntegrationParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
         }
@@ -685,6 +822,20 @@ const Provider = ({
                     testDraft: testBroadcastDraft,
                     broadcastDraft: broadcastDraft,
                     getDraft: getBroadcastDraft,
+                },
+
+                content: {
+                    create: createContent,
+                    update: updateContent,
+                    publish: publishContent,
+                    unpublish: unpublishContent,
+                    getDraft: getContentDraft,
+                    get: getContent, // public
+                },
+
+                contentPass: {
+                    create: createContentPass,
+                    update: updateContentPass,
                 },
 
                 calendar: {

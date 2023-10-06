@@ -1,5 +1,7 @@
 import { AuthCallParams } from "../../types";
 import { UserReservation, UserReservationSetting } from "../Calendar/types";
+import { Content } from "../Content/types";
+import { ContentPass } from "../ContentPass/types";
 import { UserGithubSetting } from "../Github/types";
 import { Webhook } from "../Integration/types";
 import { Mail, MailTier } from "../Mail/types";
@@ -26,6 +28,8 @@ export type User = {
     subscriptions?: MailingListSubscriber[];
     reservations?: UserReservation[];
     reservationSettings?: UserReservationSetting[];
+    contents?: Content[];
+    contentPasses?: ContentPass[];
     webhooks?: Webhook[];
     githubSettings?: UserGithubSetting[];
     is_verified: boolean;
