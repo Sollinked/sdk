@@ -17,7 +17,7 @@ import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
 import { BroadcastParams, DraftParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
 import { ContentPassCreateParams, ContentPassUpdateParams } from "../ContentPass/types.js";
-import { ContentCreateParams, ContentUpdateParams } from "../Content/types.js";
+import { ContentCreateParams, ContentPayParams, ContentUpdateParams } from "../Content/types.js";
 
 class UninitializedError extends Error {
     constructor() {
@@ -507,6 +507,24 @@ const Provider = ({
         return res;
     }, [user, auth, signature]);
 
+    const payContent = useCallback(async(id: number, params: Omit<ContentPayParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await content.pay(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, [user, auth, signature]);
+
     const publishContent = useCallback(async(id: number) => {
         if(!user) {
             throw new UninitializedError();
@@ -831,6 +849,7 @@ const Provider = ({
                     unpublish: unpublishContent,
                     getDraft: getContentDraft,
                     get: getContent, // public
+                    pay: payContent,
                 },
 
                 contentPass: {

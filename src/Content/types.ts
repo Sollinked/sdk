@@ -33,3 +33,7 @@ export interface ContentUpdateParams extends AuthCallParams {
     description: string;
     value_usd: number;
 }
+
+export interface ContentPayParams extends AuthCallParams {
+    txHash: string;
+}

@@ -6,7 +6,7 @@ import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingPar
 import { AxiosResponse } from "axios";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
 import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, UpdateMailingListPriceListParams } from "./src/MailingList/types";
-import { Content, ContentCreateParams, ContentUpdateParams } from "./src/Content/types";
+import { Content, ContentCreateParams, ContentPayParams, ContentUpdateParams } from "./src/Content/types";
 import { ContentPassCreateParams, ContentPassUpdateParams } from "./src/ContentPass/types";
 
 export type ApiResult<T> = {
@@ -81,10 +81,8 @@ export type SollinkedContextState = {
         publish: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         unpublish: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         getDraft: (id: number) => Promise<string | AxiosResponse<ApiResult<Content>, any> | undefined>;
-        get: (username: string, slug: string) => Promise<string | {
-            content: Content | undefined;
-            display_name: string;
-        }>;
+        get: (username: string, slug: string) => Promise<string | Content>;
+        pay: (id: number, params: Omit<ContentPayParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<Content>, any> | undefined>;
     },
     contentPass?: {
         create: (params: Omit<ContentPassCreateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

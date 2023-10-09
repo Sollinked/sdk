@@ -1,4 +1,4 @@
-import { Content, ContentCreateParams, ContentUpdateParams } from "./types"
+import { Content, ContentCreateParams, ContentPayParams, ContentUpdateParams } from "./types"
 import axios from '../Services/axios.js';
 import { ApiResult, AuthCallParams, OptionalAuthCallParams } from "../../types";
 
@@ -55,13 +55,20 @@ export const getDraft = async(id: number, params: AuthCallParams) => {
     }
 }
 
+export const pay = async(id: number, params: ContentPayParams) => {
+    try {
+        return await axios.post<ApiResult<Content>>(`/content/payment/${id}`, params);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
 // get public content
 export const get = async(username: string, slug: string, auth: OptionalAuthCallParams) => {
     try {
-        let res = await axios.post<ApiResult<{
-                                    content?: Content;
-                                    display_name: string;
-                                }>>(`/content/public/${username}/${slug}`, { ...auth });
+        let res = await axios.post<ApiResult<Content>>(`/content/public/${username}/${slug}`, { ...auth });
         if(!res.data.success) {
             return res.data.message ?? "Error";
         }
@@ -70,15 +77,7 @@ export const get = async(username: string, slug: string, auth: OptionalAuthCallP
             return "Empty";
         }
     
-        let {
-            content,
-            display_name,
-        } = res.data.data;
-    
-        return {
-            content,
-            display_name,
-        };
+        return res.data.data;
     }
 
     catch(e: any) {
