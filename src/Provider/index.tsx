@@ -131,6 +131,23 @@ const Provider = ({
         }
     }, [ auth, signature, cookies, setCookie ]);
 
+    const meContentPasses = useCallback(async() => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+        let res = await account.meContentPasses({address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res.data.data;
+    }, [ user, signature, auth ]);
+
     // create the account
     const createAccount = useCallback(async(username: string, customSignature?: string) => {
         let sigToVerify = customSignature ?? signature;
@@ -832,6 +849,7 @@ const Provider = ({
                 // user
                 account: {
                     me,
+                    meContentPasses: meContentPasses,
                     create: createAccount,
                     update: updateAccount,
                     getHomepageUsers,

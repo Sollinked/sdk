@@ -10,6 +10,14 @@ export type ContentPass = {
     cnft_count: number; // how many miinted
 }
 
+export type ContentCNFT = {
+    id: number;
+    mint_address: string;
+    nft_id: number;
+    content_pass_id: number;
+    created_at: string;
+}
+
 export interface ContentPassCreateParams extends AuthCallParams {
     name: string;
     description: string;

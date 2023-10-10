@@ -1,4 +1,5 @@
 import { ApiResult, AuthCallParams } from "../../types";
+import { ContentCNFT } from "../ContentPass/types";
 import axios from '../Services/axios.js';
 import { HomepageUser, PublicUser, User, UserCreateParams, UserUpdateParams } from "./types";
 import _ from 'lodash';
@@ -19,6 +20,17 @@ export const create = async(params: UserCreateParams) => {
 export const me = async(params: AuthCallParams) => {
     try {
         return await axios.post<ApiResult<User>>('/user/me', params);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+// get own content pass
+export const meContentPasses = async(params: AuthCallParams) => {
+    try {
+        return await axios.post<ApiResult<ContentCNFT[]>>('/user/me/content_passes', params);
     }
 
     catch(e: any) {

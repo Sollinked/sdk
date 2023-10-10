@@ -7,7 +7,7 @@ import { AxiosResponse } from "axios";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
 import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, UpdateMailingListPriceListParams } from "./src/MailingList/types";
 import { Content, ContentCreateParams, ContentPayParams, ContentUpdateParams } from "./src/Content/types";
-import { ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "./src/ContentPass/types";
+import { ContentCNFT, ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "./src/ContentPass/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -44,6 +44,7 @@ export type SollinkedContextState = {
     init?: (customSignature?: string) => Promise<User | undefined>;
     account?: {
         me: (customSignature?: string) => Promise<User | undefined>;
+        meContentPasses: () => Promise<string | ContentCNFT[] | undefined>;
         create: (username: string) => Promise<User | undefined>;
         update: (params: Omit<UserUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         getHomepageUsers: () => Promise<string | HomepageUser[]>;
