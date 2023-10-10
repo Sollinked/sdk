@@ -1,4 +1,5 @@
 import { AuthCallParams } from "../../types";
+import { ContentPass } from "../ContentPass/types";
 
 export type ContentStatus = 'draft' | 'published';
 
@@ -15,6 +16,9 @@ export type Content = {
     status: ContentStatus;
     deleted_at?: string;
     updated_at: string;
+
+    // generated
+    contentPasses?: ContentPass[];
 }
 
 export interface ContentCreateParams extends AuthCallParams {

@@ -7,6 +7,7 @@ export type ContentPass = {
     description: string;
     amount: number; // limited amount
     value_usd: number; // price per pass
+    cnft_count: number; // how many miinted
 }
 
 export interface ContentPassCreateParams extends AuthCallParams {
@@ -21,4 +22,8 @@ export interface ContentPassUpdateParams extends AuthCallParams {
     description: string;
     amount: number; // limited amount
     value_usd: number; // price per pass
+}
+
+export interface ContentPassPayParams extends AuthCallParams {
+    txHash: string;
 }

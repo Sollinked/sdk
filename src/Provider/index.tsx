@@ -16,7 +16,7 @@ import { useCookies } from 'react-cookie';
 import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
 import { BroadcastParams, DraftParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
-import { ContentPassCreateParams, ContentPassUpdateParams } from "../ContentPass/types.js";
+import { ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "../ContentPass/types.js";
 import { ContentCreateParams, ContentPayParams, ContentUpdateParams } from "../Content/types.js";
 
 class UninitializedError extends Error {
@@ -620,6 +620,24 @@ const Provider = ({
         return res;
     }, [user, auth, signature, me]);
 
+    const payContentPass = useCallback(async(id: number, params: Omit<ContentPassPayParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await contentPass.pay(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, [user, auth, signature]);
+
     // calendar functions
     const setCalendarPresetPrice = useCallback(async(reservationSettings: UserReservationSetting[]) => {
         if(!user) {
@@ -855,6 +873,7 @@ const Provider = ({
                 contentPass: {
                     create: createContentPass,
                     update: updateContentPass,
+                    pay: payContentPass,
                 },
 
                 calendar: {
