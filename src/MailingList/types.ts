@@ -38,6 +38,7 @@ export type MailingListPriceTier = {
 
     // generated
     username?: string;
+    past_broadcasts: PastBroadcast[];
 }
 
 export type MailingListBroadcast = {
@@ -55,6 +56,14 @@ export type MailingListBroadcast = {
     total_count: number;
 }
 
+export type PastBroadcast = {
+    id: number;
+    user_id: number;
+    username: string;
+    title: string;
+    created_at: string;
+}
+
 export interface CreateMailingListParams extends AuthCallParams {
     tier_ids?: number[];
 }
@@ -69,8 +78,15 @@ export interface BroadcastParams extends AuthCallParams {
     content: string;
 }
 
+// by content creator
 export interface RetryBroadcastParams extends AuthCallParams {
 
+}
+
+// by subscriber
+export interface ResendBroadcastParams extends AuthCallParams {
+    broadcast_id: number;
+    subscriber_id: number;
 }
 
 export interface DraftParams extends AuthCallParams {

@@ -15,7 +15,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { useCookies } from 'react-cookie';
 import { convertToLocalDayAndHour } from "../../utils.js";
 import { UpdateIntegrationParams } from "../Integration/types";
-import { BroadcastParams, DraftParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
+import { BroadcastParams, DraftParams, ResendBroadcastParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
 import { ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "../ContentPass/types.js";
 import { ContentCreateParams, ContentPayParams, ContentUpdateParams } from "../Content/types.js";
 
@@ -382,6 +382,25 @@ const Provider = ({
         let { address, message } = auth;
 
         let res = await mailingList.retry(id, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [user, auth, signature, me]);
+
+    const resendBroadcast = useCallback(async(params: Omit<ResendBroadcastParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            return;
+        }
+
+        let { address, message } = auth;
+
+        let res = await mailingList.resend({address, message, signature, ...params});
         if(typeof res === 'string') {
             return res;
         }
@@ -870,6 +889,7 @@ const Provider = ({
                     updateTiers: updateMailingListPriceTiers,
                     get: getUserMailingList,
                     retry: retryBroadcast,
+                    resend: resendBroadcast,
                     broadcast: newBroadcast,
                     saveDraft: saveBroadcastDraft,
                     updateDraft: updateBroadcastDraft,

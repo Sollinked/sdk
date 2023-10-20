@@ -5,7 +5,7 @@ import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, Us
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
 import { AxiosResponse } from "axios";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "./src/Mail/types";
-import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, UpdateMailingListPriceListParams } from "./src/MailingList/types";
+import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, ResendBroadcastParams, UpdateMailingListPriceListParams } from "./src/MailingList/types";
 import { Content, ContentCreateParams, ContentPayParams, ContentUpdateParams } from "./src/Content/types";
 import { ContentCNFT, ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "./src/ContentPass/types";
 
@@ -69,6 +69,7 @@ export type SollinkedContextState = {
             display_name: string;
         }>;
         retry: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        resend: (params: Omit<ResendBroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         broadcast: (params: Omit<BroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         saveDraft: (params: Omit<BroadcastParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<number>, any> | undefined>;
         updateDraft: (id: number, params: Omit<DraftParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
