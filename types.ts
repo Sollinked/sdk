@@ -51,6 +51,7 @@ export type SollinkedContextState = {
         getHomepageUsers: () => Promise<string | HomepageUser[]>;
         get: (username: string) => Promise<string | PublicUser>;
         search: (username: string) => Promise<string | HomepageUser[]>;
+        searchAddress: (address: string) => Promise<string | HomepageUser>;
     },
     mail?: {
         setTiers: (tiers: MailTier[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

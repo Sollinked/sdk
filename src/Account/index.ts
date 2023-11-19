@@ -59,6 +59,16 @@ export const search = async(username: string) => {
     }
 }
 
+export const searchAddress = async(address: string) => {
+    try {
+        return await axios.get<ApiResult<HomepageUser>>(`/user/searchAddress/${address}`);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
 // update personal details
 export const update = async(id: number, params: UserUpdateParams) => {
     try {

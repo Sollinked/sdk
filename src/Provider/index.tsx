@@ -234,6 +234,20 @@ const Provider = ({
 
     }, []);
 
+    const searchUserAddress = useCallback(async(address: string) => {
+        let res = await account.searchAddress(address);
+        if(typeof res === 'string') {
+            return res;
+        }
+
+        if(!res.data.data) {
+            return "Unable to get user";
+        }
+
+        return res.data.data;
+
+    }, []);
+
     const getUser = useCallback(async(username: string) => {
         let res = await account.get(username);
         if(typeof res === 'string') {
@@ -894,6 +908,7 @@ const Provider = ({
                     getHomepageUsers,
                     get: getUser,
                     search: searchUser,
+                    searchAddress: searchUserAddress,
                 },
 
                 mail: {
