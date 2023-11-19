@@ -1,7 +1,7 @@
 import { ApiResult, AuthCallParams } from "../../types";
 import { ContentCNFT } from "../ContentPass/types";
 import axios from '../Services/axios.js';
-import { HomepageUser, PublicUser, User, UserCreateParams, UserUpdateParams } from "./types";
+import { HomepageUser, PublicUser, User, UserCreateParams, UserUpdateParams, UserUpdateTagParams } from "./types";
 import _ from 'lodash';
 
 // register account
@@ -98,6 +98,18 @@ export const update = async(id: number, params: UserUpdateParams) => {
     }
 
     catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+// update personal details
+export const updateTags = async(id: number, params: UserUpdateTagParams) => {
+    try {
+        return await axios.post<ApiResult<undefined>>(`/user/updateTags/${id}`, params);
+    }
+
+    catch(e: any) {
+        console.log(e);
         return e.response.data as string;
     }
 }

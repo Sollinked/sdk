@@ -7,7 +7,7 @@ import * as mailingList from '../MailingList/index.js';
 import * as content from '../Content/index.js';
 import * as contentPass from '../ContentPass/index.js';
 import { AuthCallParams, ProviderProps, SollinkedContextState } from "../../types";
-import { User, UserUpdateParams } from "../Account/types";
+import { User, UserUpdateParams, UserUpdateTagParams } from "../Account/types";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "../Mail/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservationSetting } from "../Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams } from "../Github/types";
@@ -137,7 +137,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -175,11 +175,30 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
         let res = await account.update(user.id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [ user, auth, signature, me ]);
+
+    // updates the account's tags, like BONK WHALE etc
+    const updateAccountTags = useCallback(async(params: Omit<UserUpdateTagParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await account.updateTags(user.id, {address, message, signature, ...params});
         if(typeof res === 'string') {
             return res;
         }
@@ -235,7 +254,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -253,7 +272,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -271,7 +290,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -308,7 +327,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -329,7 +348,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -357,7 +376,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -376,7 +395,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -395,7 +414,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -414,7 +433,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -433,7 +452,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -451,7 +470,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -469,7 +488,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -488,7 +507,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -512,7 +531,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -531,7 +550,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -549,7 +568,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -567,7 +586,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -586,7 +605,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -605,7 +624,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -624,7 +643,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -643,7 +662,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -662,7 +681,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -681,7 +700,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -699,7 +718,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -727,7 +746,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -745,7 +764,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -763,7 +782,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -781,7 +800,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -808,7 +827,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -826,7 +845,7 @@ const Provider = ({
         }
         
         if(!auth.address || !auth.message || !signature) {
-            return;
+            throw new UninitializedError();
         }
 
         let { address, message } = auth;
@@ -871,6 +890,7 @@ const Provider = ({
                     meContentPasses: meContentPasses,
                     create: createAccount,
                     update: updateAccount,
+                    updateTags: updateAccountTags,
                     getHomepageUsers,
                     get: getUser,
                     search: searchUser,

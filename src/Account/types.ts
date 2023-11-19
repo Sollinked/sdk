@@ -33,6 +33,7 @@ export type User = {
     webhooks?: Webhook[];
     githubSettings?: UserGithubSetting[];
     is_verified: boolean;
+    tags?: UserTag[];
 }
 
 export interface UserCreateParams extends AuthCallParams {
@@ -53,6 +54,11 @@ export interface UserUpdateParams extends AuthCallParams {
     youtube?: string;
 }
 
+export interface UserUpdateTagParams extends AuthCallParams {
+    tags: string[];
+    hash: string;
+}
+
 export type PublicUser = {
     id: number;
     username: string;
@@ -70,6 +76,7 @@ export type PublicUser = {
     contents?: Content[];
     contentPasses?: ContentPass[];
     is_verified: boolean;
+    tags?: UserTag[];
 }
 
 export type HomepageUser = {
@@ -78,4 +85,9 @@ export type HomepageUser = {
     profile_picture?: string;
     value_usd: number;
     is_verified: boolean;
+}
+
+export type UserTag = {
+    user_id: number;
+    name: string;
 }

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { HomepageUser, PublicUser, User, UserUpdateParams } from "./src/Account/types";
+import { HomepageUser, PublicUser, User, UserUpdateParams, UserUpdateTagParams } from "./src/Account/types";
 import { UpdateIntegrationParams } from "./src/Integration/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
@@ -47,6 +47,7 @@ export type SollinkedContextState = {
         meContentPasses: () => Promise<string | ContentCNFT[] | undefined>;
         create: (username: string) => Promise<User | undefined>;
         update: (params: Omit<UserUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+        updateTags: (params: Omit<UserUpdateTagParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         getHomepageUsers: () => Promise<string | HomepageUser[]>;
         get: (username: string) => Promise<string | PublicUser>;
         search: (username: string) => Promise<string | HomepageUser[]>;
