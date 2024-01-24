@@ -44,6 +44,7 @@ export type SollinkedContextState = {
     init?: (customSignature?: string) => Promise<User | undefined>;
     account?: {
         me: (customSignature?: string) => Promise<User | undefined>;
+        clear: () => void;
         meContentPasses: () => Promise<string | ContentCNFT[] | undefined>;
         create: (username: string) => Promise<User | undefined>;
         update: (params: Omit<UserUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;

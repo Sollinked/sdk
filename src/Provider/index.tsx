@@ -83,6 +83,11 @@ const Provider = ({
         return cookies.signatures[auth.address] as string ?? "";
     }, [cookies, auth]);
 
+    // clear account
+    const clear = useCallback(() => {
+        setUser(DEFAULT_USER);
+    }, []);
+
     // account functions
     // uses customSignature to verify address if specified
     const me = useCallback(async(customSignature?: string) => {
@@ -369,7 +374,6 @@ const Provider = ({
 
         // create new mailing list if id is 0 or id is not present
         if(!id) {
-            console.log('creating new list')
             let res = await newMailingList(false);
             if(typeof res === 'string') {
                 return res;
@@ -877,16 +881,23 @@ const Provider = ({
             return;
         }
 
+        let sigToVerify = customSignature ?? signature;
+        if(!sigToVerify) {
+            return;
+        }
+
         setIsVerifying(true);
+
         let res = await me(customSignature);
 
         if(!res) {
             res = await createAccount(auth.address, customSignature);
         }
+
         setIsVerifying(false);
         setUser(res ?? DEFAULT_USER);
         return res;
-    }, [ auth, createAccount, me ]);
+    }, [ auth, createAccount, signature, me ]);
 
     return (
         <SollinkedContext.Provider
@@ -901,6 +912,7 @@ const Provider = ({
                 // user
                 account: {
                     me,
+                    clear,
                     meContentPasses: meContentPasses,
                     create: createAccount,
                     update: updateAccount,
