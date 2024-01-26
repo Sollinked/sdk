@@ -1,11 +1,28 @@
-import { ClaimAllMailParams, ClaimSpecificMailParams, NewMailParams, OnMailPaymentParams, UpdateMailTierParams } from "./types"
+import { ClaimAllMailParams, ClaimSpecificMailParams, NewMailParams, OnMailPaymentParams, ThreadMail, UpdateMailTierParams } from "./types"
 import axios from '../Services/axios.js';
-import { ApiResult } from "../../types";
+import { ApiResult, AuthCallParams } from "../../types";
 
 // get mails
 // unused
-export const get = async() => {
+export const getThreads = async(username: string, params: AuthCallParams) => {
+    try {
+        return await axios.post<ApiResult<ThreadMail[]>>(`/mail/threads/${username}`, params);
+    }
 
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
+// claim all responded mails
+export const getThread = async(id: number, params: AuthCallParams) => {
+    try {
+        return await axios.post<ApiResult<ThreadMail>>(`/mail/thread/${id}`, params);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
 }
 
 // set tiers

@@ -285,6 +285,7 @@ const Provider = ({
         return res;
     }, [ user, signature, auth, me ]);
 
+    // deprecated
     const claimMail = useCallback(async(id: number, claimToAddress?: string) => {
         if(!user) {
             throw new UninitializedError();
@@ -303,6 +304,7 @@ const Provider = ({
         return res;
     }, [ user, signature, auth, me ]);
 
+    // deprecated
     const claimAllMail = useCallback(async(claimToAddress?: string) => {
         if(!user) {
             throw new UninitializedError();
@@ -321,14 +323,60 @@ const Provider = ({
         return res;
     }, [ user, signature, auth, me ]);
 
-    const newMail = useCallback(async(toUsername: string, params: NewMailParams) => {
-        let res = await mail.newMail(toUsername, params);
+    const getEmails = useCallback(async(username: string) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await mail.getThreads(username, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        // await me();
+        return res.data.data;
+    }, [ user, signature, auth ]);
+
+    const getEmailThread = useCallback(async(mailId: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await mail.getThread(mailId, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        // await me();
+        return res.data.data;
+    }, [ user, signature, auth ]);
+
+    const newMail = useCallback(async(toUsername: string, params: Omit<NewMailParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await mail.newMail(toUsername, {address, message, signature, ...params});
+        
         if(typeof res === 'string') {
             return res;
         } 
 
         return res.data.data;
-    }, [ ]);
+    }, [ user, signature, auth ]);
 
     const onMailPayment = useCallback(async(toUsername: string, params: OnMailPaymentParams) => {
         let res = await mail.onMailPayment(toUsername, params);
@@ -924,6 +972,8 @@ const Provider = ({
                 },
 
                 mail: {
+                    get: getEmails,
+                    getThread: getEmailThread,
                     setTiers: setMailTiers,
                     claim: claimMail,
                     claimAll: claimAllMail,
