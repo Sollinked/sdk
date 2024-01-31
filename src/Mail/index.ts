@@ -1,4 +1,4 @@
-import { ClaimAllMailParams, ClaimSpecificMailParams, NewMailParams, OnMailPaymentParams, ThreadMail, UpdateMailTierParams } from "./types"
+import { ClaimAllMailParams, ClaimSpecificMailParams, MailPaymentResponse, NewMailParams, OnMailPaymentParams, ThreadMail, UpdateMailTierParams } from "./types"
 import axios from '../Services/axios.js';
 import { ApiResult, AuthCallParams } from "../../types";
 
@@ -72,6 +72,18 @@ export const newMail = async(toUsername: string, params: NewMailParams) => {
         return e.response.data as string;
     }
 }
+
+//retrives payment details for the email
+export const getPaymentDetails = async(mailId: number) => {
+    try {
+        return await axios.get<ApiResult<MailPaymentResponse>>(`/mail/payment/${mailId}`);
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
+
 // second step of new mail
 export const onMailPayment = async(toUsername: string, params: OnMailPaymentParams) => {
     try {

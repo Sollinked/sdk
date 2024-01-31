@@ -39,7 +39,16 @@ export type ThreadMail = {
     reply_message?: string; // in html
     value_usd?: number;
     tiplink_url?: string; // will have value if the mail expired
+    tiplink_public_key: string;
     is_processed: boolean;
+}
+
+export type MailPaymentResponse = {
+    tiplink_public_key: string;
+    is_processed: boolean;
+    tiers: MailTier[];
+    username: string;
+    display_name?: string;
 }
 
 export type GetMailParams = {

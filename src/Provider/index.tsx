@@ -359,6 +359,15 @@ const Provider = ({
         return res.data.data;
     }, [ user, signature, auth ]);
 
+    const getEmailPaymentDetails = useCallback(async(mailId: number) => {
+        let res = await mail.getPaymentDetails(mailId);
+        if(typeof res === 'string') {
+            return res;
+        }
+        // await me();
+        return res.data.data;
+    }, [ ]);
+
     const newMail = useCallback(async(toUsername: string, params: Omit<NewMailParams, keyof AuthCallParams>) => {
         if(!user) {
             throw new UninitializedError();
@@ -974,6 +983,7 @@ const Provider = ({
                 mail: {
                     get: getEmails,
                     getThread: getEmailThread,
+                    getPaymentDetails: getEmailPaymentDetails,
                     setTiers: setMailTiers,
                     claim: claimMail,
                     claimAll: claimAllMail,

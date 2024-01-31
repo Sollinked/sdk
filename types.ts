@@ -4,7 +4,7 @@ import { UpdateIntegrationParams } from "./src/Integration/types";
 import { ReserveCalendarParams, UpdateUserReservationParams, UserReservation, UserReservationSetting } from "./src/Calendar/types";
 import { CreateGitHubSettingParams, NewGithubIssueParams, UpdateGitHubSettingParams, UserGithubTier } from "./src/Github/types";
 import { AxiosResponse } from "axios";
-import { MailTier, NewMailParams, OnMailPaymentParams, ThreadMail } from "./src/Mail/types";
+import { MailPaymentResponse, MailTier, NewMailParams, OnMailPaymentParams, ThreadMail } from "./src/Mail/types";
 import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, ResendBroadcastParams, UpdateMailingListPriceListParams } from "./src/MailingList/types";
 import { Content, ContentCreateParams, ContentPayParams, ContentUpdateParams } from "./src/Content/types";
 import { ContentCNFT, ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "./src/ContentPass/types";
@@ -57,6 +57,7 @@ export type SollinkedContextState = {
     mail?: {
         get: (username: string) => Promise<string | ThreadMail[] | undefined>;
         getThread: (mailId: number) => Promise<string | ThreadMail | undefined>;
+        getPaymentDetails: (mailId: number) => Promise<string | MailPaymentResponse | undefined>;
         setTiers: (tiers: MailTier[]) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         claim: (id: number, claimToAddress?: string) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         claimAll: (claimToAddress?: string) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
