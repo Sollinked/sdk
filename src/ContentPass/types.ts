@@ -7,7 +7,8 @@ export type ContentPass = {
     description: string;
     amount: number; // limited amount
     value_usd: number; // price per pass
-    cnft_count: number; // how many miinted
+    cnft_count: number; // how many minted
+    paymentlink_id?: string;
 }
 
 export type ContentCNFT = {

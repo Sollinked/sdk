@@ -16,6 +16,7 @@ export type Content = {
     status: ContentStatus;
     deleted_at?: string;
     updated_at: string;
+    paymentlink_id?: string;
 
     // generated
     contentPasses?: ContentPass[];
