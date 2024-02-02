@@ -90,6 +90,7 @@ export type SollinkedContextState = {
         unpublish: (id: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         getDraft: (id: number) => Promise<string | AxiosResponse<ApiResult<Content>, any> | undefined>;
         get: (username: string, slug: string) => Promise<string | Content>;
+        getLatest: () => Promise<string | Content[]>;
         pay: (id: number, params: Omit<ContentPayParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<Content>, any> | undefined>;
     },
     contentPass?: {

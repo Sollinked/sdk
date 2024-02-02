@@ -711,6 +711,10 @@ const Provider = ({
         return await content.get(username, slug, {...auth, signature});
     }, [user, auth, signature]);
 
+    const getLatestContent = useCallback(async() => {
+        return await content.getLatest();
+    }, []);
+
     // content pass functions
     const createContentPass = useCallback(async(params: Omit<ContentPassCreateParams, keyof AuthCallParams>) => {
         if(!user) {
@@ -1012,6 +1016,7 @@ const Provider = ({
                     unpublish: unpublishContent,
                     getDraft: getContentDraft,
                     get: getContent, // public
+                    getLatest: getLatestContent, // public
                     pay: payContent,
                 },
 

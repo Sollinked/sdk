@@ -84,3 +84,23 @@ export const get = async(username: string, slug: string, auth: OptionalAuthCallP
         return e.response.data as string;
     }
 }
+
+// displays the latest published contents
+export const getLatest = async() => {
+    try {
+        let res = await axios.get<ApiResult<Content[]>>(`/content`);
+        if(!res.data.success) {
+            return res.data.message ?? "Error";
+        }
+    
+        if(!res.data.data) {
+            return "Empty";
+        }
+    
+        return res.data.data;
+    }
+
+    catch(e: any) {
+        return e.response.data as string;
+    }
+}
