@@ -49,6 +49,8 @@ export type MailPaymentResponse = {
     tiers: MailTier[];
     username: string;
     display_name?: string;
+    is_verified: boolean;
+    holiday_mode: boolean;
 }
 
 export type GetMailParams = {

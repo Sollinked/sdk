@@ -42,6 +42,7 @@ const DEFAULT_USER = {
     youtube: "",
     tiers: [],
     is_verified: false,
+    holiday_mode: false,
 };
 
 // react's version
