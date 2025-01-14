@@ -1,4 +1,5 @@
 import { AuthCallParams } from "../../types";
+import { MailAuction, ProcessedMailAuction } from "../Auction/types";
 import { UserReservation, UserReservationSetting } from "../Calendar/types";
 import { Content } from "../Content/types";
 import { ContentPass } from "../ContentPass/types";
@@ -35,6 +36,7 @@ export type User = {
     is_verified: boolean;
     holiday_mode: boolean;
     tags?: UserTag[];
+    auctions?: ProcessedMailAuction[];
 }
 
 export interface UserCreateParams extends AuthCallParams {

@@ -8,6 +8,7 @@ import { MailPaymentResponse, MailTier, NewMailParams, OnMailPaymentParams, Thre
 import { BroadcastParams, DraftParams, MailingList, MailingListBroadcast, ResendBroadcastParams, UpdateMailingListPriceListParams } from "./src/MailingList/types";
 import { Content, ContentCreateParams, ContentPayParams, ContentUpdateParams } from "./src/Content/types";
 import { ContentCNFT, ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "./src/ContentPass/types";
+import { AuctionBidParams, AuctionCreateParams, AuctionDeleteParams, AuctionUpdateParams, OwnPreviousBid, PublicMailAuctionWithBidder } from "./src/Auction/types";
 
 export type ApiResult<T> = {
     success: boolean;
@@ -127,6 +128,15 @@ export type SollinkedContextState = {
     integration?: {
         update: (webhookId: number, params: Omit<UpdateIntegrationParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
         test: (webhookId: number) => Promise<string | AxiosResponse<ApiResult<undefined>, any> | undefined>;
+    },
+    auction?: {
+        get: (id: number) => Promise<string | PublicMailAuctionWithBidder>;
+        live: () => Promise<string | PublicMailAuctionWithBidder[]>;
+        create: (params: Omit<AuctionCreateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any>>;
+        update: (id: number, params: Omit<AuctionUpdateParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any>>;
+        delete: (id: number, params: Omit<AuctionDeleteParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<undefined>, any>>; 
+        bid: (id: number, params: Omit<AuctionBidParams, keyof AuthCallParams>) => Promise<string | AxiosResponse<ApiResult<string>, any>>;
+        previous: (id: number) => Promise<string | OwnPreviousBid>;
     }
 }
 

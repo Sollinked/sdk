@@ -6,6 +6,7 @@ import * as integration from '../Integration/index.js';
 import * as mailingList from '../MailingList/index.js';
 import * as content from '../Content/index.js';
 import * as contentPass from '../ContentPass/index.js';
+import * as auction from '../Auction/index.js';
 import { AuthCallParams, ProviderProps, SollinkedContextState } from "../../types";
 import { User, UserUpdateParams, UserUpdateTagParams } from "../Account/types";
 import { MailTier, NewMailParams, OnMailPaymentParams } from "../Mail/types";
@@ -18,6 +19,7 @@ import { UpdateIntegrationParams } from "../Integration/types";
 import { BroadcastParams, DraftParams, ResendBroadcastParams, RetryBroadcastParams, UpdateMailingListPriceListParams } from "../MailingList/types.js";
 import { ContentPassCreateParams, ContentPassPayParams, ContentPassUpdateParams } from "../ContentPass/types.js";
 import { ContentCreateParams, ContentPayParams, ContentUpdateParams } from "../Content/types.js";
+import { AuctionBidParams, AuctionCreateParams, AuctionDeleteParams, AuctionUpdateParams } from "../Auction/types.js";
 
 class UninitializedError extends Error {
     constructor() {
@@ -937,6 +939,112 @@ const Provider = ({
         return res;
     }, [ user, auth, signature, me ]);
 
+    /** Auctions */
+    const getLiveAuctions = useCallback(async() => {
+        return await auction.getLive();
+    }, []);
+
+    const getAuction = useCallback(async(id: number) => {
+        let res = await auction.get(id);
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, []);
+
+    // returns the previous registered bid amount for user
+    const getPreviousBid = useCallback(async(id: number) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await auction.getPreviousBid(id, {address, message, signature});
+        if(typeof res === 'string') {
+            return res;
+        }
+        return res;
+    }, [ user, auth, signature ]);
+
+    const createAuction = useCallback(async(params: Omit<AuctionCreateParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+
+        let res = await auction.create({address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [ user, auth, signature, me ]);
+
+    const updateAuction = useCallback(async(id: number, params: Omit<AuctionUpdateParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await auction.update(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [ user, auth, signature, me ]);
+
+
+    const deleteAuction = useCallback(async(id: number, params: Omit<AuctionDeleteParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+        let res = await auction.cancel(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [ user, auth, signature, me ]);
+
+    const bidAuction = useCallback(async(id: number, params: Omit<AuctionBidParams, keyof AuthCallParams>) => {
+        if(!user) {
+            throw new UninitializedError();
+        }
+        
+        if(!auth.address || !auth.message || !signature) {
+            throw new UninitializedError();
+        }
+
+        let { address, message } = auth;
+
+        let res = await auction.bid(id, {address, message, signature, ...params});
+        if(typeof res === 'string') {
+            return res;
+        }
+        await me();
+        return res;
+    }, [ user, auth, signature, me ]);
+
     // initialize
     const init = useCallback(async(customSignature?: string) => {
         if(!auth.address) {
@@ -1046,6 +1154,16 @@ const Provider = ({
                 integration: {
                     update: updateIntegration,
                     test: testIntegration,
+                },
+
+                auction: {
+                    get: getAuction,
+                    live: getLiveAuctions,
+                    create: createAuction,
+                    update: updateAuction,
+                    delete: deleteAuction,
+                    bid: bidAuction,
+                    previous: getPreviousBid,
                 }
             }}
         >
