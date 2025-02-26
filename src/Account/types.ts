@@ -37,6 +37,10 @@ export type User = {
     holiday_mode: boolean;
     tags?: UserTag[];
     auctions?: ProcessedMailAuction[];
+    is_auto_auction: boolean;
+    auto_auction_duration: number;
+    auto_auction_start_bid: number;
+    auto_auction_winner_count: number;
 }
 
 export interface UserCreateParams extends AuthCallParams {

@@ -45,6 +45,10 @@ const DEFAULT_USER = {
     tiers: [],
     is_verified: false,
     holiday_mode: false,
+    is_auto_auction: false,
+    auto_auction_duration: 0,
+    auto_auction_start_bid: 0,
+    auto_auction_winner_count: 0,
 };
 
 // react's version

@@ -7,6 +7,7 @@ export type MailAuction = {
     min_bid: number;
     end_date: string;
     created_at: string;
+    winner_count: number;
 }
 
 export type ProcessedMailAuction = MailAuction & {
@@ -20,6 +21,7 @@ export type PublicMailAuction = {
     start_date: number; // unix
     end_date: number; // unix
     min_bid: number;
+    winner_count: number;
 }
 
 export type PublicMailAuctionWithBidder = {
@@ -29,6 +31,7 @@ export type PublicMailAuctionWithBidder = {
     start_date: number; // unix
     end_date: number; // unix
     min_bid: number;
+    winner_count: number;
 
     bidders: PublicBidder[];
 }
@@ -68,12 +71,14 @@ export interface AuctionCreateParams extends AuthCallParams {
     start_date: number; // unix
     end_date: number; // unix
     min_bid: number;
+    winner_count: number;
 }
 
 export interface AuctionUpdateParams extends AuthCallParams {
     start_date: number; // unix
     end_date: number; // unix
     min_bid: number;
+    winner_count: number;
 }
 
 export interface AuctionDeleteParams extends AuthCallParams {
